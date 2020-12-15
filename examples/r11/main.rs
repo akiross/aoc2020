@@ -8,19 +8,20 @@ fn count_nbors(seats: &Vec<Vec<char>>, i: usize, j: usize) -> usize {
         for &x in &[-1, 0, 1] {
             // Skip seat itself
             if x == 0 && y == 0 {
-                continue
+                continue;
             }
             let i = i as i32 + y;
             let j = j as i32 + x;
             // Ignore out of bounds
             if i < 0 || j < 0 || i >= h || j >= w {
-                continue
+                continue;
             }
             match seats[i as usize][j as usize] {
-                '#' => { occ += 1; },
+                '#' => {
+                    occ += 1;
+                }
                 _ => {}
             }
-            
         }
     }
     return occ;
@@ -35,7 +36,7 @@ fn count_line(seats: &Vec<Vec<char>>, i: usize, j: usize) -> usize {
     for &y in &[-1, 0, 1] {
         for &x in &[-1, 0, 1] {
             if x == 0 && y == 0 {
-                continue
+                continue;
             }
             let mut i = i as i32 + y;
             let mut j = j as i32 + x;
@@ -43,10 +44,10 @@ fn count_line(seats: &Vec<Vec<char>>, i: usize, j: usize) -> usize {
                 match seats[i as usize][j as usize] {
                     '#' => {
                         occ += 1;
-                        break
+                        break;
                     }
-                    'L' => { break }
-                    _ => { }
+                    'L' => break,
+                    _ => {}
                 }
                 i += y;
                 j += x;
@@ -56,8 +57,10 @@ fn count_line(seats: &Vec<Vec<char>>, i: usize, j: usize) -> usize {
     occ
 }
 
-fn step<F>(seats: &Vec<Vec<char>>, thresh: usize, counter: F) -> Vec<Vec<char>> 
-where F: Fn(&Vec<Vec<char>>, usize, usize) -> usize {
+fn step<F>(seats: &Vec<Vec<char>>, thresh: usize, counter: F) -> Vec<Vec<char>>
+where
+    F: Fn(&Vec<Vec<char>>, usize, usize) -> usize,
+{
     let mut nseats = seats.clone();
     for i in 0..seats.len() {
         for j in 0..seats[i].len() {
@@ -97,7 +100,10 @@ fn main() {
         steps += 1;
         let s = step(&seats, 4, count_nbors);
         if s == seats {
-            let occup: usize = s.iter().map(|r| r.iter().filter(|&&s| s == '#' ).count() ).sum();
+            let occup: usize = s
+                .iter()
+                .map(|r| r.iter().filter(|&&s| s == '#').count())
+                .sum();
             println!("Stable after {} steps, {} occupied", steps, occup);
             break;
         } else {
@@ -111,7 +117,10 @@ fn main() {
         steps += 1;
         let s = step(&seats, 5, count_line);
         if s == seats {
-            let occup: usize = s.iter().map(|r| r.iter().filter(|&&s| s == '#' ).count() ).sum();
+            let occup: usize = s
+                .iter()
+                .map(|r| r.iter().filter(|&&s| s == '#').count())
+                .sum();
             println!("Stable after {} steps, {} occupied", steps, occup);
             break;
         } else {
